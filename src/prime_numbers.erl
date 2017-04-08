@@ -1,9 +1,11 @@
 -module(prime_numbers).
 -export([factors/1, list_primes/1, is_divisible/2]).
 
+% List out factors of a number
 factors(N) ->
     factors(N, 2, []).
 
+% tail recursive helper for factors
 factors(N, Idx, Acc) when (Idx*Idx =< N) and (N rem Idx =:= 0) -> factors(N div Idx, Idx, Acc ++ [Idx]);
 factors(N, Idx, Acc) when (Idx*Idx =< N) and (N rem Idx /= 0) -> factors(N, Idx + 1, Acc);
 factors(N, Idx, Acc) when (Idx*Idx > N) -> Acc ++ [N].
