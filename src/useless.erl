@@ -1,5 +1,5 @@
 -module(useless).
--export([hello/0, add/2, greet_and_add_two/1, same/2, valid_time/1, correct_age/1, wrong_age/1]).
+-export([hello/0, add/2, greet_and_add_two/1, same/2, valid_time/1, correct_age/1, wrong_age/1, duplicate/2]).
 -import(io, [format/1]).
 
 hello() ->
@@ -34,3 +34,10 @@ wrong_age(X) when X < 16; X > 104 ->
     true;
 wrong_age(_) ->
     false.
+
+% Recursion
+
+% Duplication
+duplicate(X,N) -> duplicate(X, N, []).
+duplicate(_, 0, Acc) -> Acc;
+duplicate(X, N, Acc) -> duplicate(X, N-1, [X|Acc]).
