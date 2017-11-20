@@ -3,12 +3,12 @@
 
 % List out factors of a number
 factors(N) ->
-    factors(N, 2, []).
+    ordsets:to_list(factors(N, 2, ordsets:new())).
 
 % tail recursive helper for factors
-factors(N, Idx, Acc) when (Idx*Idx =< N) and (N rem Idx =:= 0) -> factors(N div Idx, Idx, Acc ++ [Idx]);
+factors(N, Idx, Acc) when (Idx*Idx =< N) and (N rem Idx =:= 0) -> factors(N div Idx, Idx, ordsets:add_element(Idx, Acc));
 factors(N, Idx, Acc) when (Idx*Idx =< N) and (N rem Idx /= 0) -> factors(N, Idx + 1, Acc);
-factors(N, Idx, Acc) when (Idx*Idx > N) -> Acc ++ [N].
+factors(N, Idx, Acc) when (Idx*Idx > N) -> ordsets:add_element(N, Acc).
 
 % Checks if the first parameter is divisible by any of the entries in the list
 is_divisible(_, []) -> false;
