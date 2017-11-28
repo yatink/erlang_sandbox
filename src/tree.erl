@@ -1,5 +1,5 @@
 -module(tree).
--export([empty/0, insert/3, lookup/2]).
+-export([empty/0, insert/3, lookup/2, has_value_bidirectional/2]).
 
 empty() -> {node, 'nil'}.
 
@@ -20,3 +20,14 @@ lookup(LookupKey, {node, {Key, _, _, Larger}}) when LookupKey > Key ->
     lookup(LookupKey, Larger);
 lookup(Key, {node, {Key, Value, _, _}}) ->
     Value.
+
+has_value_bidirectional(_, {node, 'nil'}) ->
+    false;
+has_value_bidirectional(Key, {node, {Key, _, _, _}}) ->
+    true;
+has_value_bidirectional(LookupKey, {node, {_, _, Left, Right}}) ->
+    case has_value_bidirectional(LookupKey, Left) of
+        true ->
+            true;
+        false -> has_value_bidirectional(LookupKey, Right)
+    end.
