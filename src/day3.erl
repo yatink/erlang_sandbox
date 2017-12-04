@@ -1,5 +1,5 @@
 -module(day3).
--export([find_ring_and_offset/1, find_side/2, calc_steps/3, go_home/1]).
+-export([find_ring_and_offset/1, find_side/2, calc_steps/3, part1/1, spiral_iterator/4]).
 
 %Given a spiral of numbers like so
 %17  16  15  14  13
@@ -31,7 +31,27 @@ calc_steps(Offset, RingIndex, top) -> abs(Offset - 3 * (RingIndex - 1)) + RingIn
 calc_steps(Offset, RingIndex, left) -> abs(Offset - 5 * (RingIndex - 1)) + RingIndex - 1; 
 calc_steps(Offset, RingIndex, bottom) -> abs(Offset - 7 * (RingIndex - 1)) + RingIndex - 1.
 
-go_home(Query) ->
+part1(Query) ->
     {RingIndex, Offset} = find_ring_and_offset(Query),
     Side = find_side(RingIndex, Offset),
     calc_steps(Offset, RingIndex, Side).
+
+
+rotate90(up) -> left;
+rotate90(left) -> down;
+rotate90(down) -> right;
+rotate90(right) -> up.
+
+move({X,Y}, left) -> {X-1, Y};
+move({X,Y}, right) -> {X+1, Y};
+move({X,Y}, up) -> {X, Y+1};
+move({X,Y}, down) -> {X, Y-1}.
+     
+
+spiral_iterator({X,Y}, X_offset, Y_offset, Direction) when X-X_offset =:= Y-Y_offset, X-X_offset > 0 -> move({X,Y}, left);
+spiral_iterator({X,Y}, X_offset, Y_offset, Direction) when X - X_offset < 0 , -1 * (X - X_offset) =:= Y-Y_offset -> move({X,Y}, down);
+spiral_iterator({X,Y}, X_offset, Y_offset, Direction) when X-X_offset =:= Y-Y_offset, X-X_offset < 0 -> move({X,Y}, right);
+spiral_iterator({X,Y}, X_offset, Y_offset, Direction) when X-X_offset > 1, -1 * (X-X_offset) =:= Y-Y_offset - 1-> move({X,Y}, up);
+spiral_iterator({X,Y}, X_offset, Y_offset, Direction) -> move({X,Y}, Direction).
+    
+    
